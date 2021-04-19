@@ -5,4 +5,4 @@ It consists of 3 microservices that call each other with a utility project that 
 Start Service-B then service-A for server-sent-events in 3 seconds interval
 
 To use Queue/Messaging architecture, run docker-compose for any of Kafka or RabbitMQ 
-(Note: Kafka also needs Zooker to be started) and start Service-C.
+(Note: Kafka also needs Zookeeper to be started) and start Service-C.
