@@ -14,29 +14,29 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
 @Component
-public class MessagesConsumer implements Consumer<FluxSink<MessagePayload>> {
+public class MessagesConsumer {
 
     private final Logger LOG = LoggerFactory.getLogger(MessagesConsumer.class);
-
     private final BlockingQueue<MessagePayload> messageQueue = new LinkedBlockingQueue<>();
 
     @Bean
     public Consumer<MessagePayload> messageConsumer() {
         return messagePayload -> {
             LOG.info("Consuming message from the Queue {}", messagePayload);
-            this.messageQueue.offer(messagePayload);
+            messageQueue.offer(messagePayload);
         };
     }
 
-    @Override
-    public void accept(FluxSink<MessagePayload> messagePayloadFluxSink) {
-        try {
-            MessagePayload messagePayload = messageQueue.take();
-            messagePayloadFluxSink.next(messagePayload);
-            LOG.info("Sending message back to the caller of message {}", messagePayload.getId());
-        } catch (InterruptedException exception) {
-            ReflectionUtils.rethrowRuntimeException(exception);
-            throw new EventProcessingException(exception);
-        }
+    public Consumer<FluxSink<MessagePayload>> sinkConsumer() {
+        return messagePayloadFluxSink -> {
+            try {
+                MessagePayload messagePayload = messageQueue.take();
+                messagePayloadFluxSink.next(messagePayload);
+                LOG.info("Sending message back to the caller of message {}", messagePayload);
+            } catch (InterruptedException exception) {
+                ReflectionUtils.rethrowRuntimeException(exception);
+                throw new EventProcessingException(exception);
+            }
+        };
     }
 }

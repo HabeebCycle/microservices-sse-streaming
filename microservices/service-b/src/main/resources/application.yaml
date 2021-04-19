@@ -11,7 +11,6 @@ service:
 spring:
   application:
     name: service-b
-  main.allow-bean-definition-overriding: true
 
   # Messaging binders for the cloud streaming
   cloud.stream:

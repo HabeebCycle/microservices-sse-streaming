@@ -20,7 +20,7 @@ public class MessageController {
 
     public MessageController(MessageService messageService, MessagesConsumer messagesConsumer) {
         this.messageService = messageService;
-        this.consumerEvents = Flux.create(messagesConsumer).share();
+        this.consumerEvents = Flux.create(messagesConsumer.sinkConsumer()).share();
     }
 
     @GetMapping(path = "/interval", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
@@ -30,7 +30,10 @@ public class MessageController {
 
     @GetMapping(path = "/api/{messageId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Mono<MessagePayload> getProcessedMessage(@PathVariable String messageId) {
-        messageService.getServiceCToProduce(messageId);
+        messageService
+                .getServiceCToProduce(messageId)
+                .doOnSuccess(b -> System.out.println(b ? "Called API waiting for the message to be consumed"
+                        : "API Call failed"));
         return consumerEvents.next();
     }
 }

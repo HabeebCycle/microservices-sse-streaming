@@ -25,7 +25,7 @@ public class MessageService {
         this.serverAddress = serverAddress;
     }
 
-    public Mono<Void> sendMessagePayload(String messageId) {
+    public Mono<Boolean> sendMessagePayload(String messageId) {
 
         MessagePayload messagePayload = new MessagePayload(
                 MessageGenerator.randomAuthor(),
@@ -37,7 +37,6 @@ public class MessageService {
         LOG.info("Producing {} to Queue with Id: {}. Simulating tedious  processing with a delay of 5 seconds", messagePayload, messageId);
 
         return Mono.delay(Duration.ofSeconds(5))
-                .map(aLong -> streamBridge.send(PRODUCER_BINDING_NAME, messagePayload))
-                .then();
+                .map(aLong -> streamBridge.send(PRODUCER_BINDING_NAME, messagePayload));
     }
 }
