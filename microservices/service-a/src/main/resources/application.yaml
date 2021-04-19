@@ -1,0 +1,69 @@
+server:
+  port: 7000
+  forward-headers-strategy: FRAMEWORK
+  error:
+    include-message: always
+
+service:
+  service-b:
+    host: localhost
+    port: 7001
+
+spring:
+  application:
+    name: service-a
+  # Cloud gateway routes settings
+  cloud:
+    gateway:
+      #httpclient:
+      #connect-timeout: 20000
+      #response-timeout: 20s
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - POST
+              - GET
+              - DELETE
+              - PUT
+            allowedHeaders: "*" #It is not configured to support simple requests across domains such as GET and DELETE. It is essential for complex requests such as POST SSE requests.
+      routes:
+        - id: service-b-api
+          uri: http://${service.service-b.host}:${service.service-b.port}
+          predicates:
+            - Path=/message/stream/api/**
+        - id: service-b-web
+          uri: http://${service.service-b.host}:${service.service-b.port}
+          predicates:
+            - Path=/message/stream/interval
+
+        # Testing some routes
+        - id: host_route_200
+          uri: http://httpstat.us
+          predicates:
+            - Host=i.feel.lucky:8080
+            - Path=/headerrouting/**
+          filters:
+            - SetPath=/200
+        - id: host_route_418
+          uri: http://httpstat.us
+          predicates:
+            - Host=im.a.teapot:8080
+            - Path=/headerrouting/**
+          filters:
+            - SetPath=/418
+        - id: host_route_501
+          uri: http://httpstat.us
+          predicates:
+            - Path=/headerrouting/**
+          filters:
+            - SetPath=/501
+
+# Logging settings
+logging:
+  level:
+    root: INFO
+    com.habeebcycle: DEBUG
+    org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: INFO
+    org.springframework.cloud.gateway: TRACE

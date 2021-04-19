@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link data-th-href="@{/css/bootstrap.min.css}" rel="stylesheet">
+        <link data-th-href="@{/css/style.css}" rel="stylesheet">
+        <title>Reactive SSE</title>
+    </head>
+    <body>
+
+        <div class="container">
+
+            <div class="row">
+                <div id="title">
+                    <h1>Spring WebFlux + Server Sent Events</h1>
+                </div>
+
+                <table id="messages" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th width="15%">Author</th>
+                        <th width="45%">Message</th>
+                        <th width="15%">Date</th>
+                        <th width="25%">Address</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="result" data-th-each="message : ${messages}">
+                        <td>[[${message.author}]]</td>
+                        <td>[[${message.message}]]</td>
+                        <td>[[${message.timestamp}]]</td>
+                        <td>[[${message.serviceAddress}]]</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <script data-th-src="@{/js/eventsource.js}"></script>
+        <script data-th-src="@{/js/main.js}"></script>
+    </body>
+</html>

@@ -1,0 +1,37 @@
+server:
+  port: 7002
+  error:
+    include-message: always
+
+spring:
+  application:
+    name: service-c
+
+  # Messaging binders for the cloud streaming
+  cloud.stream:
+    default:
+      binder: rabbit  # Change this to 'kafka' for kafka topics
+      contentType: application/json
+    bindings:
+      # Use the supplier function name as input to create destination and groups in 3.0+
+      messageProducer-out-0:
+        destination: messages
+        producer:
+          requiredGroups: messageGroup
+
+    # Kafka broker binder
+    kafka.binder:
+      brokers: 127.0.0.1
+      defaultBrokerPort: 9092
+
+  # RabbitMQ parameters
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+
+# Logging settings
+logging:
+  level:
+    root: INFO
+    com.habeebcycle: DEBUG
+    org.springframework.amqp: DEBUG

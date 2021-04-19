@@ -1,0 +1,59 @@
+server:
+  port: 7001
+  error:
+    include-message: always
+
+service:
+  service-c:
+    host: localhost
+    port: 7002
+
+spring:
+  application:
+    name: service-b
+  main.allow-bean-definition-overriding: true
+
+  # Messaging binders for the cloud streaming
+  cloud.stream:
+    default:
+      binder: rabbit  # Change this to 'kafka' for kafka topics
+      contentType: application/json
+    bindings:
+      # Use the consumer function name as input to create destination and group in 3.0+
+      messageConsumer-in-0:
+        destination: messages
+        group: messageGroup
+        consumer:
+          maxAttempts: 3
+          backOffInitialInterval: 500
+          backOffMaxInterval: 1000
+          backOffMultiplier: 2.0
+    # RabbitMQ consumer input binding parameters
+    rabbit:
+      bindings:
+        messageConsumer-in-0:
+          consumer:
+            autoBindDlq: true
+            republishToDlq: true
+    # Kafka consumer input binding parameters
+    kafka:
+      bindings:
+        messageConsumer-in-0:
+          consumer:
+            enableDlq: true
+      binder:
+        brokers: 127.0.0.1
+        defaultBrokerPort: 9092
+
+  # RabbitMQ parameters
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+
+# Logging settings
+logging:
+  level:
+    root: INFO
+    com.habeebcycle: DEBUG
+    org.springframework.amqp: DEBUG
+
