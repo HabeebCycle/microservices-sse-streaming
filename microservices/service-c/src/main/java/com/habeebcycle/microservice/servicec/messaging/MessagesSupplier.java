@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 import java.util.function.Supplier;
 
 @Component
-public class MessageSupplier {
+public class MessagesSupplier {
 
-    private final Logger LOG = LoggerFactory.getLogger(MessageSupplier.class);
+    private final Logger LOG = LoggerFactory.getLogger(MessagesSupplier.class);
 
     @Bean
     public Supplier<MessagePayload> messageProducer() {
