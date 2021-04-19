@@ -30,7 +30,7 @@ public class MessageHandler {
                         .map(interval -> {
                             MessagePayload message = messageService.getOneMessage();
                             return ServerSentEvent.<MessagePayload>builder()
-                                    .id("id")
+                                    .id(message.getId())
                                     .event("periodic-event")
                                     .data(message)
                                     .build();
