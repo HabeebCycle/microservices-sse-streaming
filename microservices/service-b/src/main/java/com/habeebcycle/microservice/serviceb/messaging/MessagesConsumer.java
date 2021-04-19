@@ -33,6 +33,7 @@ public class MessagesConsumer implements Consumer<FluxSink<MessagePayload>> {
         try {
             MessagePayload messagePayload = messageQueue.take();
             messagePayloadFluxSink.next(messagePayload);
+            LOG.info("Sending message back to the caller of message {}", messagePayload.getId());
         } catch (InterruptedException exception) {
             ReflectionUtils.rethrowRuntimeException(exception);
             throw new EventProcessingException(exception);

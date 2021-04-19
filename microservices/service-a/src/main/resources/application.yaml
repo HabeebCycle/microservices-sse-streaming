@@ -36,7 +36,7 @@ spring:
         - id: service-b-web
           uri: http://${service.service-b.host}:${service.service-b.port}
           predicates:
-            - Path=/message/stream/interval
+            - Path=/message/stream/**
 
         # Testing some routes
         - id: host_route_200

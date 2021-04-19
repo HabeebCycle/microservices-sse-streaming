@@ -28,7 +28,7 @@ public class MessageController {
         return messageService.findAllMessages();
     }
 
-    @GetMapping(path = "/queue/{messageId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(path = "/api/{messageId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Mono<MessagePayload> getProcessedMessage(@PathVariable String messageId) {
         messageService.getServiceCToProduce(messageId);
         return consumerEvents.next();

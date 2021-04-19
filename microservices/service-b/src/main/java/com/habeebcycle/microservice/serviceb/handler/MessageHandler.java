@@ -23,15 +23,18 @@ public class MessageHandler {
     }
 
     public Mono<ServerResponse> handleRequest(final ServerRequest serverRequest) {
-        MessagePayload message = messageService.getOneMessage();
+
         return ServerResponse.ok()
                 .contentType(MediaType.TEXT_EVENT_STREAM)
                 .body(fromServerSentEvents(Flux.interval(Duration.ofSeconds(3))
-                        .map(interval -> ServerSentEvent.<MessagePayload>builder()
-                                .id("id")
-                                .event("periodic-event")
-                                .data(message)
-                                .build())));
+                        .map(interval -> {
+                            MessagePayload message = messageService.getOneMessage();
+                            return ServerSentEvent.<MessagePayload>builder()
+                                    .id("id")
+                                    .event("periodic-event")
+                                    .data(message)
+                                    .build();
+                        })));
                 //.body(fromPublisher(messages, MessagePayload.class));
     }
 }

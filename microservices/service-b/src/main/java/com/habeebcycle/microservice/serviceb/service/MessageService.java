@@ -44,6 +44,7 @@ public class MessageService {
     }
 
     public Mono<Void> getServiceCToProduce(String messageId) {
+        LOG.info("Calling Service C to produce message with messageId {}", messageId);
         String producerEndpoint = "/produce/" + messageId;
         return webClient
                 .get()

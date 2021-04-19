@@ -34,7 +34,7 @@ public class MessageService {
         messagePayload.setId(messageId);
         messagePayload.setServiceAddress(serverAddress.getHostAddress());
 
-        LOG.info("Producing {} by service-c to Queue with Id: {} with delay of 5 seconds", messagePayload, messageId);
+        LOG.info("Producing {} to Queue with Id: {}. Simulating tedious  processing with a delay of 5 seconds", messagePayload, messageId);
 
         return Mono.delay(Duration.ofSeconds(5))
                 .map(aLong -> streamBridge.send(PRODUCER_BINDING_NAME, messagePayload))
