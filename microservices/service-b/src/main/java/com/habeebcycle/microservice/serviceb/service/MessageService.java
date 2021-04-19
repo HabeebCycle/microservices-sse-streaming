@@ -10,6 +10,7 @@ import com.habeebcycle.sse.util.server.ServerAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
@@ -36,9 +37,9 @@ public class MessageService {
                           @Value("${service.service-c.host}") String serviceCHost,
                           @Value("${service.service-c.port}") String serviceCPort) {
         this.serverAddress = serverAddress;
+        this.serviceCUrl = "http://" + serviceCHost + ":" + serviceCPort;
         this.webClient = webClient.build();
         this.mapper = mapper;
-        this.serviceCUrl = "http://" + serviceCHost + ":" + serviceCPort;
     }
 
     public Flux<MessagePayload> findAllMessages() {
@@ -55,9 +56,10 @@ public class MessageService {
     public Mono<Boolean> getServiceCToProduce(String messageId) {
         String producerEndpoint = serviceCUrl + "/produce/" + messageId;
         LOG.info("Calling Service C on {} to produce message with messageId {}", producerEndpoint, messageId);
-        return webClient
+        return this.webClient
                 .get()
                 .uri(producerEndpoint)
+                .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(Boolean.class)
                 .onErrorMap(WebClientException.class, this::handleHttpClientException);

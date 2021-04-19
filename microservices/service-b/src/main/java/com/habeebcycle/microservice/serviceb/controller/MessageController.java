@@ -33,7 +33,7 @@ public class MessageController {
         messageService
                 .getServiceCToProduce(messageId)
                 .doOnSuccess(b -> System.out.println(b ? "Called API waiting for the message to be consumed"
-                        : "API Call failed"));
+                        : "API Call failed")).subscribe();
         return consumerEvents.next();
     }
 }

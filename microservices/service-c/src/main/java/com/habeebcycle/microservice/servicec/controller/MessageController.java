@@ -21,7 +21,7 @@ public class MessageController {
 
     @GetMapping("/produce/{messageId}")
     public Mono<Boolean> produceMessage(@PathVariable String messageId) {
-        LOG.info("Getting call... producing to Message Queue, Please Consume");
+        LOG.info("Getting called... producing to Message Queue, Please Consume");
         return messageService.sendMessagePayload(messageId);
     }
 }

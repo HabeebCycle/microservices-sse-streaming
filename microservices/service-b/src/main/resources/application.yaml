@@ -5,7 +5,7 @@ server:
 
 service:
   service-c:
-    host: localhost
+    host: 127.0.0.1
     port: 7002
 
 spring:
