@@ -23,8 +23,13 @@ public class MessageController {
         this.consumerEvents = Flux.create(messagesConsumer.sinkConsumer()).share();
     }
 
+    @GetMapping(path = "/single", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Mono<MessagePayload> getSingleMessage() {
+        return Mono.just(messageService.getOneMessage());
+    }
+
     @GetMapping(path = "/interval", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<MessagePayload> getIntervalComment() {
+    public Flux<MessagePayload> getIntervalMessage() {
         return messageService.findAllMessages();
     }
 
