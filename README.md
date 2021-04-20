@@ -20,5 +20,8 @@ Service C writes response for 5 seconds to Kafka or RabbitMQ topics and then con
 
 
 Performance Test
-$ ./load.sh 10000 http://127.0.0.1:7000/message/stream/single     For 10,000 calls per seconds
+```shell
+$ ./load.sh 10000 http://127.0.0.1:7000/message/stream/single     #For 10,000 calls per seconds
+```
+
 
