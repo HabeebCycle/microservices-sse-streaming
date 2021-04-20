@@ -17,3 +17,8 @@ Request for response at http://localhost:7000/message/stream/api/{messageId} rou
 which in turn initiate call to http://localhost:7002/produce/{messageId} at Service C.
 
 Service C writes response for 5 seconds to Kafka or RabbitMQ topics and then consumed by Service B which then return response back to service A at port 7000.
+
+
+Performance Test
+$ ./load.sh 10000 http://127.0.0.1:7000/message/stream/single     For 10,000 calls per seconds
+
