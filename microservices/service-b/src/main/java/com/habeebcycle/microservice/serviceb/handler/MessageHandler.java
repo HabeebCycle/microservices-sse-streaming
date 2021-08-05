@@ -31,7 +31,7 @@ public class MessageHandler {
                             MessagePayload message = messageService.getOneMessage();
                             return ServerSentEvent.<MessagePayload>builder()
                                     .id(message.getId())
-                                    .event("periodic-event")
+                                    .event("message")
                                     .data(message)
                                     .build();
                         })));
